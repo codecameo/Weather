@@ -11,7 +11,7 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 class DbProvider @Inject constructor(val weatherDb : WeatherDB) : DbManager{
-    override fun saveCurLocation(locationEntity: LocationEntity) {
+    override fun saveLocation(locationEntity: LocationEntity) {
         return weatherDb.getLocationListDao().insert(locationEntity)
     }
 

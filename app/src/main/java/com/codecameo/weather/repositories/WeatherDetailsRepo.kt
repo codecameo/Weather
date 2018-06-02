@@ -1,34 +1,27 @@
 package com.codecameo.weather.repositories
 
-import android.provider.Settings
-import android.text.TextUtils
-import android.util.Log
 import com.codecameo.weather.EMPTY_STRING
 import com.codecameo.weather.LAST_SEEN_WEATHER_ID
 import com.codecameo.weather.conversion.getWeatherDbModel
+import com.codecameo.weather.conversion.getWeatherViewModel
 import com.codecameo.weather.data.DataManager
 import com.codecameo.weather.dbhelper.entity.LocationEntity
 import com.codecameo.weather.dbhelper.entity.WeatherDetailsEntity
 import com.codecameo.weather.models.LocationViewModel
 import com.codecameo.weather.models.WeatherViewModel
 import com.codecameo.weather.network.ApiConstant
-import com.codecameo.weather.network.models.address.AddressApiModel
 import com.codecameo.weather.network.models.timezone.TimeZoneApiModel
 import com.codecameo.weather.network.models.weather.WeatherDetailsApiModel
-import com.codecameo.weather.utils.isListEmpty
-import com.codecameo.weather.utils.parseLocation
-import com.codecameo.weather.utils.showToast
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Consumer
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-import kotlin.math.ln
 
 class WeatherDetailsRepo @Inject constructor(dataManager : DataManager)  : BaseRepo(dataManager) {
 
@@ -91,7 +84,7 @@ class WeatherDetailsRepo @Inject constructor(dataManager : DataManager)  : BaseR
     }
 
     private fun saveCurrentLocation(locationEntity: LocationEntity) {
-        return dataManager.saveCurLocation(locationEntity)
+        return dataManager.saveLocation(locationEntity)
     }
 
     fun getLastSeenWeather(): Flowable<WeatherViewModel> {
@@ -108,6 +101,26 @@ class WeatherDetailsRepo @Inject constructor(dataManager : DataManager)  : BaseR
         return dataManager.getLocationList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getWeatherInfo(lat: Double, lng: Double): Single<WeatherViewModel> {
+        val timeStamp = System.currentTimeMillis()/1000
+        return Single.zip(
+                dataManager.getCurrentWeatherUpdate(lat, lng, ApiConstant.APP_ID_WEATHER),
+                dataManager.getLocation(lat, lng),
+                dataManager.getTimeZone("$lat,$lng", timeStamp),
+                object : Function3<WeatherDetailsApiModel, String, TimeZoneApiModel, WeatherViewModel>{
+                    override fun apply(weatherDetailsApiModel: WeatherDetailsApiModel, location: String, timeZoneApiModel: TimeZoneApiModel): WeatherViewModel {
+                        val entity = WeatherViewModel(LAST_SEEN_WEATHER_ID)
+                        entity.let { getWeatherViewModel(weatherDetailsApiModel, it) }
+                        entity.location = location
+                        timeZoneApiModel?.let {
+                            entity.timeZoneId = it.timeZoneId?: EMPTY_STRING
+                        }
+                        return entity
+                    }
+                })
+
     }
 }
 

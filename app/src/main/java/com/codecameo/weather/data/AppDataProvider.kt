@@ -6,17 +6,15 @@ import com.codecameo.weather.dbhelper.entity.WeatherDetailsEntity
 import com.codecameo.weather.di.ApplicationContext
 import com.codecameo.weather.models.LocationViewModel
 import com.codecameo.weather.models.WeatherViewModel
-import com.codecameo.weather.network.models.address.AddressApiModel
 import com.codecameo.weather.network.models.timezone.TimeZoneApiModel
 import com.codecameo.weather.network.models.weather.WeatherDetailsApiModel
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
 
 class AppDataProvider @Inject constructor(@ApplicationContext val context : Context, val dbHelper : DbManager, val networkDataManager: NetworkDataManager, val locationDataManager: LocationDataManager): DataManager {
-    override fun saveCurLocation(locationEntity: LocationEntity) {
-        return dbHelper.saveCurLocation(locationEntity)
+    override fun saveLocation(locationEntity: LocationEntity) {
+        return dbHelper.saveLocation(locationEntity)
     }
 
     override fun getLocationList(): Flowable<List<LocationViewModel>> {

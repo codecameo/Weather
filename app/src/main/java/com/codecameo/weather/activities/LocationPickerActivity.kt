@@ -12,6 +12,7 @@ import com.codecameo.weather.DEFAULT_DOUBLE
 import com.codecameo.weather.EMPTY_STRING
 import com.codecameo.weather.R
 import com.codecameo.weather.databinding.ActivityLocationPickerBinding
+import com.codecameo.weather.dbhelper.entity.LocationEntity
 import com.codecameo.weather.utils.showToast
 import com.codecameo.weather.viewmodels.LocationPickerViewModel
 
@@ -32,6 +33,7 @@ class LocationPickerActivity : BaseActivity<ActivityLocationPickerBinding, Locat
     }
 
     private fun pickCurrentLocation() {
+        mViewModel.saveLocation(LocationEntity(0, mViewModel.mLat, mViewModel.mLng, mViewModel.mLocation))
         val intent = Intent()
         intent.putExtra(KEY_LAT, mViewModel.mLat)
         intent.putExtra(KEY_LNG, mViewModel.mLng)

@@ -2,6 +2,7 @@ package com.codecameo.weather.viewmodels
 
 import android.location.Geocoder
 import com.codecameo.weather.EMPTY_STRING
+import com.codecameo.weather.dbhelper.entity.LocationEntity
 import com.codecameo.weather.repositories.LocationPickerRepo
 import com.codecameo.weather.repositories.WeatherDetailsRepo
 import io.reactivex.Single
@@ -15,5 +16,9 @@ class LocationPickerViewModel @Inject constructor(private val mRepo : LocationPi
 
     fun getLocation() : Single<String> {
         return mRepo.getLocation(mLat, mLng)
+    }
+
+    fun saveLocation(locationEntity: LocationEntity) {
+        mRepo.saveLocation(locationEntity)
     }
 }

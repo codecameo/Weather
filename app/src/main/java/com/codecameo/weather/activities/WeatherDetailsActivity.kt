@@ -2,10 +2,8 @@ package com.codecameo.weather.activities
 
 import android.Manifest
 import android.os.Bundle
-import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
-import android.view.MenuItem
 import com.codecameo.weather.R
 import com.codecameo.weather.databinding.ActivityWeatherDetailsBinding
 import com.codecameo.weather.viewmodels.WeatherDetailViewModel
@@ -27,10 +25,8 @@ import android.view.View
 import android.widget.Toast
 import com.codecameo.weather.DEFAULT_DOUBLE
 import com.codecameo.weather.EMPTY_STRING
-import com.codecameo.weather.LAST_SEEN_WEATHER_ID
 import com.codecameo.weather.adapters.SavedLocationListAdapter
 import com.codecameo.weather.databinding.adapters.setImageBackgroundSrc
-import com.codecameo.weather.dbhelper.entity.LocationEntity
 import com.codecameo.weather.models.LocationViewModel
 import com.codecameo.weather.utils.PermissionHandler.REQUEST_COARSE_LOCATION
 import com.codecameo.weather.utils.showToast
@@ -39,11 +35,21 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.nav_header_weather_details.*
 import java.util.*
 
-
-class WeatherDetailsActivity : BaseActivity<ActivityWeatherDetailsBinding, WeatherDetailViewModel>(), NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+class WeatherDetailsActivity : BaseActivity<ActivityWeatherDetailsBinding, WeatherDetailViewModel>(), GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, SavedLocationListAdapter.OnItemClickListener {
+    override fun OnItemClicked(locationViewModel: LocationViewModel) {
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+            drawer_layout.closeDrawer(GravityCompat.START)
+        }
+        mViewModel.mLat = locationViewModel.lat
+        mViewModel.mLng = locationViewModel.lng
+        mViewModel.mLocation = locationViewModel.location
+        showLocationWeather()
+    }
 
     private val REQUEST_CODE_LOCATION_PICKER = 4003
 
@@ -92,6 +98,7 @@ class WeatherDetailsActivity : BaseActivity<ActivityWeatherDetailsBinding, Weath
 
 
     private fun initListeners() {
+        mLocationListAdapter.mOnItemClickListener = this
         mBinding.appBarInclude?.fabAddLocation?.setOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
                 if (mViewModel.isLocationSet()){
@@ -111,7 +118,6 @@ class WeatherDetailsActivity : BaseActivity<ActivityWeatherDetailsBinding, Weath
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
-        nav_view.setNavigationItemSelectedListener(this)
     }
 
 
@@ -195,11 +201,29 @@ class WeatherDetailsActivity : BaseActivity<ActivityWeatherDetailsBinding, Weath
                         mViewModel.mLat = it.getDoubleExtra(LocationPickerActivity.KEY_LAT, DEFAULT_DOUBLE)
                         mViewModel.mLng = it.getDoubleExtra(LocationPickerActivity.KEY_LNG, DEFAULT_DOUBLE)
                         mViewModel.mLocation = it.getStringExtra(LocationPickerActivity.KEY_LOCATION)
-                        updateData()
+                        showLocationWeather()
                     }
                 }
             }
         }
+    }
+
+    private fun showLocationWeather() {
+        mCompositeDisposable.add(mViewModel.getWeatherInfo()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableSingleObserver<WeatherViewModel>(){
+                    override fun onSuccess(weatherViewModel: WeatherViewModel) {
+                        mBinding.model = weatherViewModel
+                        mViewModel.mLocation = weatherViewModel.location
+                        iv_nav_bar_image?.setImageBackgroundSrc(weatherViewModel.icon)
+                        tv_time.timeZone = if (weatherViewModel.timeZoneId.isNotEmpty()) weatherViewModel.timeZoneId else return
+                    }
+
+                    override fun onError(e: Throwable) {
+                        showToast(this@WeatherDetailsActivity, getString(R.string.text_error_message))
+                    }
+                }))
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
@@ -238,32 +262,5 @@ class WeatherDetailsActivity : BaseActivity<ActivityWeatherDetailsBinding, Weath
     override fun onDestroy() {
         super.onDestroy()
         disconnectGoogleApiClient()
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
-            }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
-            }
-        }
-
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
     }
 }

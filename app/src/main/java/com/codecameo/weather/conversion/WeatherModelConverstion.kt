@@ -33,3 +33,21 @@ fun getWeatherDbModel(weatherDetails: WeatherDetailsApiModel, entity: WeatherDet
     entity.sunrise = weatherDetails.sys.sunrise
     return entity
 }
+
+fun getWeatherViewModel(weatherDetails: WeatherDetailsApiModel, entity: WeatherViewModel) : WeatherViewModel {
+
+    val windInfo = weatherDetails.wind?.let { getWindInfo(it.speed, it.degree) }
+    val weather = if(weatherDetails.weather.size> 0 ) weatherDetails.weather.get(0) else WeatherApiModel()
+
+    entity.condition = weather.main
+    entity.temp = weatherDetails.main.temp.roundToInt()
+    entity.icon = weather.icon
+    entity.humidity = weatherDetails.main.humidity
+    entity.pressure = weatherDetails.main.pressure
+    entity.maxTemp = weatherDetails.main.temp_max.roundToInt()
+    entity.minTemp = weatherDetails.main.temp_min.roundToInt()
+    entity.wind = windInfo
+    entity.sunset = weatherDetails.sys.sunset
+    entity.sunrise = weatherDetails.sys.sunrise
+    return entity
+}

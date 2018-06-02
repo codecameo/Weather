@@ -11,5 +11,5 @@ interface DbManager {
     fun getLastWeatherInfo() : Flowable<WeatherViewModel>
     fun saveLastSeenWeather(weatherDetailsEntity: WeatherDetailsEntity)
     fun getLocationList() : Flowable<List<LocationViewModel>>
-    fun saveCurLocation(locationEntity: LocationEntity)
+    fun saveLocation(locationEntity: LocationEntity)
 }

@@ -9,6 +9,8 @@ import com.codecameo.weather.models.WeatherViewModel
 import com.codecameo.weather.repositories.WeatherDetailsRepo
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import java.io.IOException
 import javax.inject.Inject
@@ -33,5 +35,9 @@ class WeatherDetailViewModel @Inject constructor(private val mRepo : WeatherDeta
 
     fun getSavedLocationList(): Flowable<List<LocationViewModel>> {
         return mRepo.getSavedLocationList()
+    }
+
+    fun getWeatherInfo(): Single<WeatherViewModel> {
+        return mRepo.getWeatherInfo(mLat, mLng)
     }
 }
