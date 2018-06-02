@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.codecameo.weather.models.WeatherViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".activities.WeatherDetailsActivity"
+        tools:showIn="@layout/app_bar_weather_details">
+
+        <com.codecameo.weather.custom.DigitalClock
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:format12Hour="hh:mm"
+            android:format24Hour="@null"
+            android:textAppearance="@style/showTime"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12:00am" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/titillium_web"
+            android:gravity="center"
+            android:text="@{model.location}"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+
+        <TextView
+            android:id="@+id/tv_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/titillium_web_semibold"
+            android:paddingRight="4dp"
+            android:text="@{``+model.temp}"
+            android:textColor="@color/white"
+            android:textSize="60sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/iv_condition"
+            app:layout_constraintTop_toBottomOf="@id/tv_location"
+            app:layout_constraintVertical_bias=".5" />
+
+        <ImageView
+            android:id="@+id/iv_condition"
+            android:layout_width="26dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="24dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            app:image_src="@{model.icon}"
+            app:layout_constraintLeft_toRightOf="@+id/tv_temperature"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_temperature" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/titillium_web"
+            android:text="@{model.condition}"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toRightOf="@+id/tv_temperature"
+            app:layout_constraintTop_toBottomOf="@+id/iv_condition" />
+
+        <TextView
+            android:id="@+id/tv_wind_title"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_wind"
+            android:text="@string/text_wind"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/guidelineV"
+            app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+        <TextView
+            android:id="@+id/tv_wind"
+            style="@style/DespText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{model.wind}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/guidelineV"
+            app:layout_constraintTop_toBottomOf="@+id/tv_wind_title"
+            tools:text="4.5 Km/H N" />
+
+        <TextView
+            android:id="@+id/tv_humidity_title"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_humidity"
+            android:text="@string/text_humidity"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="@+id/guidelineV"
+            app:layout_constraintLeft_toRightOf="@+id/guidelineV"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+        <TextView
+            android:id="@+id/tv_humidity"
+            style="@style/DespText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{model.humidity+`%`}"
+            app:layout_constraintLeft_toLeftOf="@+id/guidelineV"
+            app:layout_constraintLeft_toRightOf="@+id/guidelineV"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_humidity_title"
+            tools:text="100%" />
+
+        <TextView
+            android:id="@+id/tv_min_temp_title"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_low_temperature"
+            android:text="@string/text_min_temp"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/guidelineV"
+            app:layout_constraintTop_toBottomOf="@+id/tv_wind" />
+
+        <TextView
+            android:id="@+id/tv_min_temp"
+            style="@style/DespText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{``+model.minTemp + ((char) 0x00B0)}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/guidelineV"
+            app:layout_constraintTop_toBottomOf="@+id/tv_min_temp_title"
+            tools:text="14" />
+
+        <TextView
+            android:id="@+id/tv_max_temp_title"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_high_temperature"
+            android:text="@string/text_max_temp"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="@+id/guidelineV"
+            app:layout_constraintLeft_toRightOf="@+id/guidelineV"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_humidity" />
+
+        <TextView
+            android:id="@+id/tv_max_temp"
+            style="@style/DespText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{``+model.maxTemp + ((char) 0x00B0)}"
+            app:layout_constraintLeft_toLeftOf="@+id/guidelineV"
+            app:layout_constraintLeft_toRightOf="@+id/guidelineV"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_max_temp_title"
+            tools:text="10" />
+
+        <TextView
+            android:id="@+id/tv_sunrise_title"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_sunrise"
+            android:text="@string/text_sunrise"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/guidelineV"
+            app:layout_constraintTop_toBottomOf="@+id/tv_min_temp" />
+
+        <TextView
+            android:id="@+id/tv_sunrise"
+            style="@style/DespText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/guidelineV"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sunrise_title"
+            app:time="@{model.sunrise}"
+            app:time_zone_id="@{model.timeZoneId}"
+            tools:text="04:07am" />
+
+        <TextView
+            android:id="@+id/tv_sunset_title"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_sunset"
+            android:text="@string/text_sunset"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="@+id/guidelineV"
+            app:layout_constraintLeft_toRightOf="@+id/guidelineV"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_max_temp" />
+
+        <TextView
+            android:id="@+id/tv_sunset"
+            style="@style/DespText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@+id/guidelineV"
+            app:layout_constraintLeft_toRightOf="@+id/guidelineV"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sunset_title"
+            app:time="@{model.sunset}"
+            app:time_zone_id="@{model.timeZoneId}"
+            tools:text="06:00pm" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".5" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guidelineV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".5" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

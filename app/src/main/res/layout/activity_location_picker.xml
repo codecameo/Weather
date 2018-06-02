@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="location"
+            type="String"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".activities.LocationPickerActivity" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_placeholder" />
+
+        <TextView
+            android:id="@+id/tv_picker_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/app_button_selector"
+            android:drawableLeft="@drawable/ic_location"
+            android:ellipsize="end"
+            android:fontFamily="@font/titillium_web_semibold"
+            android:gravity="center"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:singleLine="true"
+            android:text="@{location}"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/abc_text_size_subhead_material"
+            tools:text="Dhaka, Bangladesh" />
+
+    </FrameLayout>
+</layout>

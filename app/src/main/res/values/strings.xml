@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">https://github.com/codecameo</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="empty" />
+    <string name="text_wind">Wind</string>
+    <string name="text_humidity">Humidity</string>
+    <string name="settings">Settings</string>
+    <string name="text_min_temp">Min Temp</string>
+    <string name="text_max_temp">Max Temp</string>
+    <string name="text_sunset">Sunset</string>
+    <string name="text_sunrise">Sunrise</string>
+    <string name="permission_msg_location">Provide location permission</string>
+    <string name="toast_location_permision_denied">The app was not allowed to find your location. Please consider granting it this permission</string>
+    <string name="title_activity_location_picker">Map</string>
+    <string name="text_error_message">Something went wrong. Please try again.</string>
+    <string name="failed_to_update">Failed to update. Please check internet connection</string>
+    <string name="text_not_found">Not Found</string>
+</resources>
