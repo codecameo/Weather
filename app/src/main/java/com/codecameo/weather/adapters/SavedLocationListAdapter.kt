@@ -45,10 +45,10 @@ class SavedLocationListAdapter : BaseRecyclerAdapter<SavedLocationListAdapter.Vi
 
     fun setData(locationList: List<LocationViewModel>) {
         if (mSavedLocationList.size >0) return
-        val result = DiffUtil.calculateDiff(LocationListDiff(mSavedLocationList, locationList))
+        //val result = DiffUtil.calculateDiff(LocationListDiff(mSavedLocationList, locationList))
         mSavedLocationList.clear()
         mSavedLocationList.addAll(locationList)
-        result.dispatchUpdatesTo(listUpdateCallback)
-        //notifyDataSetChanged()
+        //result.dispatchUpdatesTo(listUpdateCallback)
+        notifyDataSetChanged()
     }
 }

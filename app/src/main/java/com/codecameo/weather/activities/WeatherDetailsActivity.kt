@@ -55,11 +55,11 @@ class WeatherDetailsActivity : BaseActivity<ActivityWeatherDetailsBinding, Weath
         override fun run() {
             if (ActivityCompat.checkSelfPermission(this@WeatherDetailsActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 if (mGoogleApiClient.isConnected()) {
-                    var lastLocation : android.location.Location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
-                    if (lastLocation != null) {
+                    var lastLocation : android.location.Location? = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
+                    lastLocation?.let{
                         disconnectGoogleApiClient()
-                        mViewModel.mLat = lastLocation.latitude
-                        mViewModel.mLng = lastLocation.longitude
+                        mViewModel.mLat = it.latitude
+                        mViewModel.mLng = it.longitude
                         updateData()
                     }
                 }
