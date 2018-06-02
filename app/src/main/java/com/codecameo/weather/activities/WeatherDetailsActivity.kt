@@ -212,6 +212,11 @@ class WeatherDetailsActivity : BaseActivity<ActivityWeatherDetailsBinding, Weath
         mCompositeDisposable.add(mViewModel.getWeatherInfo()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    pb_loading_weather.visibility = View.VISIBLE
+                }.doAfterTerminate {
+                    pb_loading_weather.visibility = View.GONE
+                }
                 .subscribeWith(object : DisposableSingleObserver<WeatherViewModel>(){
                     override fun onSuccess(weatherViewModel: WeatherViewModel) {
                         mBinding.model = weatherViewModel

@@ -113,7 +113,7 @@ class LocationPickerActivity : BaseActivity<ActivityLocationPickerBinding, Locat
         disposableSingleObserver = mViewModel.getLocation().subscribeWith(object : DisposableSingleObserver<String>(){
             override fun onSuccess(location: String) {
                 mViewModel.mLocation = location
-                mBinding.tvPickerLocation.text = mViewModel.mLocation
+                mBinding.location = mViewModel.mLocation
             }
 
             override fun onError(e: Throwable) {

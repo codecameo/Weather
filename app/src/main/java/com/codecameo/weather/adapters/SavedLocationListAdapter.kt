@@ -41,22 +41,13 @@ class SavedLocationListAdapter : BaseRecyclerAdapter<SavedLocationListAdapter.Vi
             itemBinding?.root?.setOnClickListener(this)
         }
         fun bindTo(locationViewModel: LocationViewModel) {
-            itemBinding?.location = if(!locationViewModel.location.isEmpty()) locationViewModel.location else itemBinding?.root?.context?.getString(R.string.text_not_found)
+            itemBinding?.location = if(!locationViewModel?.location.isEmpty()) locationViewModel.location else itemBinding?.root?.context?.getString(R.string.text_not_found)
         }
     }
 
-    /*fun addCurrentLocation(locationViewModel: LocationViewModel){
-        mTempLocationList.add(locationViewModel)
-        val result = DiffUtil.calculateDiff(LocationListDiff(mSavedLocationList, mTempLocationList))
-        mSavedLocationList.clear()
-        mSavedLocationList.addAll(mTempLocationList)
-        result.dispatchUpdatesTo(listUpdateCallback)
-        //notifyDataSetChanged()
-    }*/
-
-    fun setData(locationList: List<LocationViewModel>) {
+    fun setData(locationList: List<LocationViewModel>?) {
         if (isListEmpty(locationList)) return
-        val result = DiffUtil.calculateDiff(LocationListDiff(mSavedLocationList, locationList))
+        val result = DiffUtil.calculateDiff(LocationListDiff(mSavedLocationList, locationList!!))
         mSavedLocationList.clear()
         mSavedLocationList.addAll(locationList)
         result.dispatchUpdatesTo(listUpdateCallback)
